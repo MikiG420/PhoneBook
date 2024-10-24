@@ -63,6 +63,11 @@ namespace BookPhoneCall
 
             int selectedIndex = 0;
             Contact selectedContact = NavigateContacts(contacts, ref selectedIndex);
+            if (selectedContact == null)
+            {
+                Console.WriteLine("Wrócono do menu.");
+                return;
+            }
 
             Console.WriteLine($"\nCzy na pewno chcesz usunąć kontakt: {selectedContact.FirstName} {selectedContact.LastName}? (y/n)");
             if (Console.ReadKey(true).Key == ConsoleKey.Y)
@@ -83,11 +88,13 @@ namespace BookPhoneCall
         public static void UpdateContact(ContactService contactService)
         {
             Console.Clear();
-            List<Contact> contacts = contactService.GetAllContacts();
+            Console.WriteLine("Aktualizacja kontaktu:");
 
+            List<Contact> contacts = contactService.GetAllContacts();
             if (contacts.Count == 0)
             {
                 Console.WriteLine("Brak kontaktów do aktualizacji.");
+                Console.WriteLine("Naciśnij dowolny klawisz, aby wrócić do menu.");
                 Console.ReadKey();
                 return;
             }
@@ -95,33 +102,44 @@ namespace BookPhoneCall
             int selectedIndex = 0;
             Contact selectedContact = NavigateContacts(contacts, ref selectedIndex);
 
-            Console.WriteLine($"\nAktualizuj dane kontaktu: {selectedContact.FirstName} {selectedContact.LastName}:");
+            // Sprawdzamy, czy użytkownik wybrał kontakt, czy wrócił do menu (null)
+            if (selectedContact == null)
+            {
+                Console.WriteLine("Wrócono do menu.");
+                return;
+            }
 
-            string firstName = GetValidInput("Nowe imię (pozostaw puste, aby nie zmieniać): ");
-            string lastName = GetValidInput("Nowe nazwisko (pozostaw puste, aby nie zmieniać): ");
-            string phoneNumber = GetValidPhoneNumber(true);
-            string email = GetValidEmail(true);
+            // Aktualizacja wybranego kontaktu
+            Console.WriteLine($"Aktualizujesz kontakt: {selectedContact.FirstName} {selectedContact.LastName}");
+            Console.Write("Nowe imię (pozostaw puste, aby nie zmieniać): ");
+            string firstName = Console.ReadLine();
+            Console.Write("Nowe nazwisko (pozostaw puste, aby nie zmieniać): ");
+            string lastName = Console.ReadLine();
+            Console.Write("Nowy numer telefonu (pozostaw puste, aby nie zmieniać): ");
+            string phoneNumber = Console.ReadLine();
+            Console.Write("Nowy email (pozostaw puste, aby nie zmieniać): ");
+            string email = Console.ReadLine();
 
-            // Aktualizacja tylko tych pól, które zostały podane
-            selectedContact.FirstName = string.IsNullOrWhiteSpace(firstName) ? selectedContact.FirstName : firstName;
-            selectedContact.LastName = string.IsNullOrWhiteSpace(lastName) ? selectedContact.LastName : lastName;
-            selectedContact.PhoneNumber = string.IsNullOrWhiteSpace(phoneNumber) ? selectedContact.PhoneNumber : phoneNumber;
-            selectedContact.Email = string.IsNullOrWhiteSpace(email) ? selectedContact.Email : email;
+            // Jeśli użytkownik nie wpisał nowych wartości, pozostawiamy stare
+            if (!string.IsNullOrWhiteSpace(firstName)) selectedContact.FirstName = firstName;
+            if (!string.IsNullOrWhiteSpace(lastName)) selectedContact.LastName = lastName;
+            if (!string.IsNullOrWhiteSpace(phoneNumber)) selectedContact.PhoneNumber = phoneNumber;
+            if (!string.IsNullOrWhiteSpace(email)) selectedContact.Email = email;
 
             contactService.UpdateContact(selectedContact);
-            Console.WriteLine("Kontakt został zaktualizowany.");
-            Console.WriteLine("Naciśnij dowolny klawisz, aby wrócić do menu.");
+            Console.WriteLine("Kontakt został zaktualizowany. Naciśnij dowolny klawisz, aby wrócić do menu.");
             Console.ReadKey();
         }
         // Metoda do poruszania się po liście kontaktów i wybierania kontaktu
         private static Contact NavigateContacts(List<Contact> contacts, ref int selectedIndex)
         {
             bool optionSelected = false;
+            bool exitToMenu = false; // Flaga do wyjścia do menu
 
-            while (!optionSelected)
+            while (!optionSelected && !exitToMenu)
             {
                 Console.Clear();
-                Console.WriteLine("Wybierz kontakt:");
+                Console.WriteLine("Wybierz kontakt (naciśnij ESC, aby wrócić do menu):");
 
                 for (int i = 0; i < contacts.Count; i++)
                 {
@@ -137,7 +155,10 @@ namespace BookPhoneCall
                     }
                 }
 
-                switch (Console.ReadKey(true).Key)
+                // Odczyt klawisza
+                var key = Console.ReadKey(true).Key;
+
+                switch (key)
                 {
                     case ConsoleKey.UpArrow:
                         selectedIndex = (selectedIndex == 0) ? contacts.Count - 1 : selectedIndex - 1;
@@ -148,10 +169,39 @@ namespace BookPhoneCall
                     case ConsoleKey.Enter:
                         optionSelected = true;
                         break;
+                    case ConsoleKey.Escape: // Dodanie opcji wyjścia do menu
+                        exitToMenu = true;
+                        break;
                 }
             }
 
-            return contacts[selectedIndex];
+            // Jeśli użytkownik nacisnął ESC, zwracamy null, co oznacza wyjście do menu
+            return exitToMenu ? null : contacts[selectedIndex];
+        }
+
+        public static void SearchContacts(ContactService contactService)
+        {
+            Console.Clear();
+            Console.WriteLine("Wprowadź frazę do wyszukania:");
+
+            string searchPhrase = Console.ReadLine();
+            var results = contactService.SearchContacts(searchPhrase);
+
+            if (results.Count == 0)
+            {
+                Console.WriteLine("Brak wyników dla podanej frazy.");
+            }
+            else
+            {
+                Console.WriteLine("Znalezione kontakty:");
+                foreach (var contact in results)
+                {
+                    Console.WriteLine($"{contact.Id}. {contact.FirstName} {contact.LastName} - {contact.PhoneNumber}, {contact.Email}");
+                }
+            }
+
+            Console.WriteLine("Naciśnij dowolny klawisz, aby wrócić do menu.");
+            Console.ReadKey();
         }
 
         private static string GetValidPhoneNumber(bool optional = false)

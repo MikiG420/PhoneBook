@@ -111,5 +111,48 @@ namespace BookPhoneCall
                 command.ExecuteNonQuery();
             }
         }
+
+        public List<Contact> SearchContacts(string searchPhrase)
+        {
+            var contacts = new List<Contact>();
+
+            using (var connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                // Zapytanie SQL do wyszukiwania we wszystkich kolumnach
+                string query = @"SELECT Id, FirstName, LastName, PhoneNumber, Email 
+                         FROM Contacts 
+                         WHERE FirstName LIKE @SearchPhrase 
+                         OR LastName LIKE @SearchPhrase 
+                         OR PhoneNumber LIKE @SearchPhrase 
+                         OR Email LIKE @SearchPhrase";
+
+                using (var command = new SQLiteCommand(query, connection))
+                {
+                    // Dodanie parametru z frazą do wyszukania (LIKE '%fraza%')
+                    command.Parameters.AddWithValue("@SearchPhrase", "%" + searchPhrase + "%");
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var contact = new Contact
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                                PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
+                                Email = reader.GetString(reader.GetOrdinal("Email"))
+                            };
+                            contacts.Add(contact);
+                        }
+                    }
+                }
+            }
+
+            return contacts;
+        }
+
     }
 }
