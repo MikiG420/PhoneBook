@@ -17,7 +17,7 @@ namespace BookPhoneCall
 
         public void DisplayMainMenu()
         {
-            string[] options = { "Dodaj kontakt", "Wyświetl kontakty", "Usuń kontakt", "Zaktualizuj kontakt", "Wyjdź" };
+            string[] options = { "Dodaj kontakt", "Wyświetl kontakty", "Usuń kontakt", "Zaktualizuj kontakt", "Szukaj kontaktu", "Wyjdź" };
             int selectedIndex = 0;
             bool running = true;
 
@@ -40,6 +40,9 @@ namespace BookPhoneCall
                         ContactActions.UpdateContact(contactService);
                         break;
                     case 4:
+                        ContactActions.SearchContacts(contactService);
+                        break;
+                    case 5:
                         running = false;
                         break;
                 }
@@ -58,7 +61,7 @@ namespace BookPhoneCall
                 {
                     if (i == selectedIndex)
                     {
-                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.ForegroundColor = ConsoleColor.Cyan;  // Wybrana opcja
                         Console.WriteLine($"> {options[i]}");
                         Console.ResetColor();
                     }
@@ -68,6 +71,7 @@ namespace BookPhoneCall
                     }
                 }
 
+                // Obsługa strzałek i enteru
                 switch (Console.ReadKey(true).Key)
                 {
                     case ConsoleKey.UpArrow:

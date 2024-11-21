@@ -67,6 +67,7 @@
     <Compile Include="ContactActions.cs" />
     <Compile Include="ContactService.cs" />
     <Compile Include="DatabaseConfig.cs" />
+    <Compile Include="IDatabaseConfig.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

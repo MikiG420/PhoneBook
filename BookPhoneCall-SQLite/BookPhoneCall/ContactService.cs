@@ -11,9 +11,9 @@ namespace BookPhoneCall
     {
         private readonly string connectionString;
 
-        public ContactService(string dbConnectionString)
+        public ContactService(string databaseConfig)
         {
-            connectionString = dbConnectionString;
+            connectionString = databaseConfig;
             CreateDatabase();
         }
 
@@ -33,7 +33,6 @@ namespace BookPhoneCall
             }
         }
 
-        // Dodawanie kontaktu
         public void AddContact(Contact contact)
         {
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
@@ -50,7 +49,6 @@ namespace BookPhoneCall
             }
         }
 
-        // Pobieranie wszystkich kontaktów
         public List<Contact> GetAllContacts()
         {
             List<Contact> contacts = new List<Contact>();
@@ -67,11 +65,11 @@ namespace BookPhoneCall
                     {
                         Contact contact = new Contact
                         {
-                            Id = Convert.ToInt32(reader["Id"]),  // Bezpieczna konwersja na int
+                            Id = Convert.ToInt32(reader["Id"]),
                             FirstName = reader["FirstName"].ToString(),
                             LastName = reader["LastName"].ToString(),
-                            PhoneNumber = reader["PhoneNumber"]?.ToString(),  // Może być null, więc używamy null-conditional operator
-                            Email = reader["Email"]?.ToString()  // Może być null
+                            PhoneNumber = reader["PhoneNumber"]?.ToString(),
+                            Email = reader["Email"]?.ToString()  
                         };
                         contacts.Add(contact);
                     }

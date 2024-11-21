@@ -32,7 +32,6 @@ namespace BookPhoneCall
             Console.ReadKey();
         }
 
-        // Wyświetlanie kontaktów bez zmian
         public static void DisplayContacts(ContactService contactService)
         {
             Console.Clear();
@@ -48,7 +47,6 @@ namespace BookPhoneCall
             Console.ReadKey();
         }
 
-        // Wybieranie kontaktu do usunięcia
         public static void DeleteContact(ContactService contactService)
         {
             Console.Clear();
@@ -84,7 +82,6 @@ namespace BookPhoneCall
             Console.ReadKey();
         }
 
-        // Wybieranie kontaktu do aktualizacji
         public static void UpdateContact(ContactService contactService)
         {
             Console.Clear();
@@ -102,14 +99,12 @@ namespace BookPhoneCall
             int selectedIndex = 0;
             Contact selectedContact = NavigateContacts(contacts, ref selectedIndex);
 
-            // Sprawdzamy, czy użytkownik wybrał kontakt, czy wrócił do menu (null)
             if (selectedContact == null)
             {
                 Console.WriteLine("Wrócono do menu.");
                 return;
             }
 
-            // Aktualizacja wybranego kontaktu
             Console.WriteLine($"Aktualizujesz kontakt: {selectedContact.FirstName} {selectedContact.LastName}");
             Console.Write("Nowe imię (pozostaw puste, aby nie zmieniać): ");
             string firstName = Console.ReadLine();
@@ -120,7 +115,6 @@ namespace BookPhoneCall
             Console.Write("Nowy email (pozostaw puste, aby nie zmieniać): ");
             string email = Console.ReadLine();
 
-            // Jeśli użytkownik nie wpisał nowych wartości, pozostawiamy stare
             if (!string.IsNullOrWhiteSpace(firstName)) selectedContact.FirstName = firstName;
             if (!string.IsNullOrWhiteSpace(lastName)) selectedContact.LastName = lastName;
             if (!string.IsNullOrWhiteSpace(phoneNumber)) selectedContact.PhoneNumber = phoneNumber;
@@ -130,11 +124,10 @@ namespace BookPhoneCall
             Console.WriteLine("Kontakt został zaktualizowany. Naciśnij dowolny klawisz, aby wrócić do menu.");
             Console.ReadKey();
         }
-        // Metoda do poruszania się po liście kontaktów i wybierania kontaktu
         private static Contact NavigateContacts(List<Contact> contacts, ref int selectedIndex)
         {
             bool optionSelected = false;
-            bool exitToMenu = false; // Flaga do wyjścia do menu
+            bool exitToMenu = false;
 
             while (!optionSelected && !exitToMenu)
             {
@@ -155,7 +148,6 @@ namespace BookPhoneCall
                     }
                 }
 
-                // Odczyt klawisza
                 var key = Console.ReadKey(true).Key;
 
                 switch (key)
@@ -169,13 +161,12 @@ namespace BookPhoneCall
                     case ConsoleKey.Enter:
                         optionSelected = true;
                         break;
-                    case ConsoleKey.Escape: // Dodanie opcji wyjścia do menu
+                    case ConsoleKey.Escape:
                         exitToMenu = true;
                         break;
                 }
             }
 
-            // Jeśli użytkownik nacisnął ESC, zwracamy null, co oznacza wyjście do menu
             return exitToMenu ? null : contacts[selectedIndex];
         }
 
@@ -206,7 +197,7 @@ namespace BookPhoneCall
 
         private static string GetValidPhoneNumber(bool optional = false)
         {
-            Regex phoneRegex = new Regex(@"^[0-9\s\-]+$");  // Numer może składać się z cyfr, spacji, myślników
+            Regex phoneRegex = new Regex(@"^[0-9\s\-]+$");
 
             while (true)
             {
@@ -225,7 +216,7 @@ namespace BookPhoneCall
 
         private static string GetValidEmail(bool optional = false)
         {
-            Regex emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");  // Prosta walidacja emaila
+            Regex emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
 
             while (true)
             {

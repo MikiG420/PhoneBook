@@ -7,9 +7,9 @@ using System.Data.SQLite;
 
 namespace BookPhoneCall
 {
-    internal class DatabaseConfig
+    internal class DatabaseConfig : IDatabaseConfig
     {
-        public static string GetConnectionString()
+        public string GetConnectionString()
         {
             return "Data Source=ContactsDB.db;Version=3;";
         }

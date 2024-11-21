@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
-using MySqlConnector;
 
 namespace BookPhoneCall
 {
@@ -12,7 +11,8 @@ namespace BookPhoneCall
     {
         static void Main()
         {
-            ContactService contactService = new ContactService(DatabaseConfig.GetConnectionString());
+            IDatabaseConfig databaseConfig = new DatabaseConfig();
+            ContactService contactService = new ContactService(databaseConfig.GetConnectionString());
             Menu menu = new Menu(contactService);
             menu.DisplayMainMenu();
         }
