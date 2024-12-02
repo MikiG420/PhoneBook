@@ -11,9 +11,12 @@ namespace BookPhoneCall
     {
         static void Main()
         {
-            IDatabaseConfig databaseConfig = new DatabaseConfig();
-            ContactService contactService = new ContactService(databaseConfig.GetConnectionString());
-            Menu menu = new Menu(contactService);
+
+            IDatabaseService databaseService = new SQLiteDatabaseService("Data Source=ContactsDB.db;Version=3;");
+
+            //IDatabaseService databaseService = new MariaDBDatabaseService("Server=localhost;Database=phonebook;User=root;Password=;");
+
+            Menu menu = new Menu(databaseService);
             menu.DisplayMainMenu();
         }
     }

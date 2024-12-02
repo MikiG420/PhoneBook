@@ -8,11 +8,11 @@ namespace BookPhoneCall
 {
     internal class Menu
     {
-        private ContactService contactService;
+        private IDatabaseService _contactService;
 
-        public Menu(ContactService contactService)
+        public Menu(IDatabaseService contactService)
         {
-            this.contactService = contactService;
+            _contactService = contactService;
         }
 
         public void DisplayMainMenu()
@@ -28,19 +28,19 @@ namespace BookPhoneCall
                 switch (selectedIndex)
                 {
                     case 0:
-                        ContactActions.AddContact(contactService);
+                        ContactActions.AddContact(_contactService);
                         break;
                     case 1:
-                        ContactActions.DisplayContacts(contactService);
+                        ContactActions.DisplayContacts(_contactService);
                         break;
                     case 2:
-                        ContactActions.DeleteContact(contactService);
+                        ContactActions.DeleteContact(_contactService);
                         break;
                     case 3:
-                        ContactActions.UpdateContact(contactService);
+                        ContactActions.UpdateContact(_contactService);
                         break;
                     case 4:
-                        ContactActions.SearchContacts(contactService);
+                        ContactActions.SearchContacts(_contactService);
                         break;
                     case 5:
                         running = false;

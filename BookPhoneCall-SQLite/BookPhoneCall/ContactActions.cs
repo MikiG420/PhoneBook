@@ -9,7 +9,7 @@ namespace BookPhoneCall
 {
     internal class ContactActions
     {
-        public static void AddContact(ContactService contactService)
+        public static void AddContact(IDatabaseService contactService)
         {
             Console.Clear();
             Console.WriteLine("Dodaj nowy kontakt:");
@@ -32,7 +32,7 @@ namespace BookPhoneCall
             Console.ReadKey();
         }
 
-        public static void DisplayContacts(ContactService contactService)
+        public static void DisplayContacts(IDatabaseService contactService)
         {
             Console.Clear();
             List<Contact> contacts = contactService.GetAllContacts();
@@ -47,7 +47,7 @@ namespace BookPhoneCall
             Console.ReadKey();
         }
 
-        public static void DeleteContact(ContactService contactService)
+        public static void DeleteContact(IDatabaseService contactService)
         {
             Console.Clear();
             List<Contact> contacts = contactService.GetAllContacts();
@@ -82,7 +82,7 @@ namespace BookPhoneCall
             Console.ReadKey();
         }
 
-        public static void UpdateContact(ContactService contactService)
+        public static void UpdateContact(IDatabaseService contactService)
         {
             Console.Clear();
             Console.WriteLine("Aktualizacja kontaktu:");
@@ -170,7 +170,7 @@ namespace BookPhoneCall
             return exitToMenu ? null : contacts[selectedIndex];
         }
 
-        public static void SearchContacts(ContactService contactService)
+        public static void SearchContacts(IDatabaseService contactService)
         {
             Console.Clear();
             Console.WriteLine("Wprowadź frazę do wyszukania:");
