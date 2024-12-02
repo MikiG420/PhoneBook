@@ -61,7 +61,7 @@ namespace BookPhoneCall
                 {
                     if (i == selectedIndex)
                     {
-                        Console.ForegroundColor = ConsoleColor.Cyan;  // Wybrana opcja
+                        Console.ForegroundColor = ConsoleColor.Cyan;
                         Console.WriteLine($"> {options[i]}");
                         Console.ResetColor();
                     }
@@ -71,7 +71,6 @@ namespace BookPhoneCall
                     }
                 }
 
-                // Obsługa strzałek i enteru
                 switch (Console.ReadKey(true).Key)
                 {
                     case ConsoleKey.UpArrow:
