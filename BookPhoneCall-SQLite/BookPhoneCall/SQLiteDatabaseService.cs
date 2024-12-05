@@ -4,16 +4,51 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
+using System.IO;
 
 namespace BookPhoneCall
 {
     public class SQLiteDatabaseService : IDatabaseService
     {
         private readonly string _connectionString;
+        private readonly string _databaseFileName;
 
-        public SQLiteDatabaseService(string connectionString)
+        public SQLiteDatabaseService(string databaseFileName)
         {
-            _connectionString = connectionString;
+            _databaseFileName = databaseFileName;
+            _connectionString = $"Data Source={_databaseFileName};Version=3;";
+            InitializeDatabase();
+        }
+
+        public void InitializeDatabase()
+        {
+            if (!File.Exists(_databaseFileName))
+            {
+                SQLiteConnection.CreateFile(_databaseFileName);
+                using (var connection = new SQLiteConnection(_connectionString))
+                {
+                    connection.Open();
+
+                    string createTableQuery = @"
+                    CREATE TABLE Contacts (
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        FirstName TEXT NOT NULL,
+                        LastName TEXT NOT NULL,
+                        PhoneNumber TEXT NOT NULL,
+                        Email TEXT NOT NULL
+                    );";
+
+                    using (var command = new SQLiteCommand(createTableQuery, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                }
+                Console.WriteLine("Baza danych została utworzona wraz z tabelą Contacts.");
+            }
+            else
+            {
+                Console.WriteLine("Baza danych już istnieje.");
+            }
         }
 
         public void AddContact(Contact contact)

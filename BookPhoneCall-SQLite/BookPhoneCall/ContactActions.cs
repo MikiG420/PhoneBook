@@ -107,13 +107,13 @@ namespace BookPhoneCall
 
             Console.WriteLine($"Aktualizujesz kontakt: {selectedContact.FirstName} {selectedContact.LastName}");
             Console.Write("Nowe imię (pozostaw puste, aby nie zmieniać): ");
-            string firstName = Console.ReadLine();
+            string firstName = GetValidInput("Imię: ");
             Console.Write("Nowe nazwisko (pozostaw puste, aby nie zmieniać): ");
-            string lastName = Console.ReadLine();
+            string lastName = GetValidInput("nazwisko: ");
             Console.Write("Nowy numer telefonu (pozostaw puste, aby nie zmieniać): ");
-            string phoneNumber = Console.ReadLine();
+            string phoneNumber = GetValidPhoneNumber();
             Console.Write("Nowy email (pozostaw puste, aby nie zmieniać): ");
-            string email = Console.ReadLine();
+            string email = GetValidEmail();
 
             if (!string.IsNullOrWhiteSpace(firstName)) selectedContact.FirstName = firstName;
             if (!string.IsNullOrWhiteSpace(lastName)) selectedContact.LastName = lastName;

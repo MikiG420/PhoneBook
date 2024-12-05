@@ -7,10 +7,56 @@ using System.Data.SqlClient;
 public class MariaDBDatabaseService : IDatabaseService
 {
     private readonly string _connectionString;
+    private readonly string _databaseName;
 
-    public MariaDBDatabaseService(string connectionString)
+    public MariaDBDatabaseService(string connectionString, string databaseName)
     {
+        _databaseName = databaseName;
         _connectionString = connectionString;
+
+        InitializeDatabase();
+    }
+
+    public void InitializeDatabase()
+    {
+        var serverConnectionString = _connectionString.Replace($"database={_databaseName};", string.Empty);
+
+        using (var connection = new MySqlConnection(serverConnectionString))
+        {
+            connection.Open();
+
+            string createDatabaseQuery = $"CREATE DATABASE IF NOT EXISTS `{_databaseName}`;";
+            using (var command = new MySqlCommand(createDatabaseQuery, connection))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
+
+        InitializeTables();
+    }
+
+    private void InitializeTables()
+    {
+        using (var connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+
+            string createTableQuery = @"
+                CREATE TABLE IF NOT EXISTS Contacts (
+                    Id INT AUTO_INCREMENT PRIMARY KEY,
+                    FirstName VARCHAR(255) NOT NULL,
+                    LastName VARCHAR(255) NOT NULL,
+                    PhoneNumber VARCHAR(50) NOT NULL,
+                    Email VARCHAR(255) NOT NULL
+                );";
+
+            using (var command = new MySqlCommand(createTableQuery, connection))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
+
+        Console.WriteLine("Baza danych i tabela zostały pomyślnie zainicjalizowane (jeśli nie istniały).");
     }
 
     public void AddContact(Contact contact)

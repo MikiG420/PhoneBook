@@ -12,9 +12,8 @@ namespace BookPhoneCall
         static void Main()
         {
 
-            IDatabaseService databaseService = new SQLiteDatabaseService("Data Source=ContactsDB.db;Version=3;");
-
-            //IDatabaseService databaseService = new MariaDBDatabaseService("Server=localhost;Database=phonebook;User=root;Password=;");
+            //IDatabaseService databaseService = new SQLiteDatabaseService("ContactsDB.db");
+            IDatabaseService databaseService = new MariaDBDatabaseService("server=localhost;user=root;password=;database=phonebook;", "phonebook");
 
             Menu menu = new Menu(databaseService);
             menu.DisplayMainMenu();

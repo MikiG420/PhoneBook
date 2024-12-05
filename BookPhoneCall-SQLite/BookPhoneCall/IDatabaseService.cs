@@ -9,6 +9,7 @@ namespace BookPhoneCall
     internal interface IDatabaseService
     {
         void AddContact(Contact contact);
+        void InitializeDatabase();
         List<Contact> GetAllContacts();
         void UpdateContact(Contact contact);
         void DeleteContact(int id);
