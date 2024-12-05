@@ -74,7 +74,7 @@ namespace BookPhoneCall
             using (var connection = new SQLiteConnection(_connectionString))
             {
                 connection.Open();
-                string query = "SELECT * FROM Contacts";
+                string query = "SELECT * FROM Contacts ORDER BY FirstName ASC";
                 using (var command = new SQLiteCommand(query, connection))
                 using (var reader = command.ExecuteReader())
                 {

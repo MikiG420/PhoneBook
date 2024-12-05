@@ -40,7 +40,7 @@ namespace BookPhoneCall
             Console.WriteLine("Lista kontaktów:");
             foreach (var contact in contacts)
             {
-                Console.WriteLine($"{contact.Id}. {contact.FirstName} {contact.LastName} - {contact.PhoneNumber}, {contact.Email}");
+                Console.WriteLine($"{contact.FirstName} {contact.LastName} - {contact.PhoneNumber}, {contact.Email}");
             }
 
             Console.WriteLine("Naciśnij dowolny klawisz, aby wrócić do menu.");
@@ -107,13 +107,13 @@ namespace BookPhoneCall
 
             Console.WriteLine($"Aktualizujesz kontakt: {selectedContact.FirstName} {selectedContact.LastName}");
             Console.Write("Nowe imię (pozostaw puste, aby nie zmieniać): ");
-            string firstName = GetValidInput("Imię: ");
+            string firstName = Console.ReadLine();
             Console.Write("Nowe nazwisko (pozostaw puste, aby nie zmieniać): ");
-            string lastName = GetValidInput("nazwisko: ");
+            string lastName = Console.ReadLine();
             Console.Write("Nowy numer telefonu (pozostaw puste, aby nie zmieniać): ");
-            string phoneNumber = GetValidPhoneNumber();
+            string phoneNumber = Console.ReadLine();
             Console.Write("Nowy email (pozostaw puste, aby nie zmieniać): ");
-            string email = GetValidEmail();
+            string email = Console.ReadLine();
 
             if (!string.IsNullOrWhiteSpace(firstName)) selectedContact.FirstName = firstName;
             if (!string.IsNullOrWhiteSpace(lastName)) selectedContact.LastName = lastName;

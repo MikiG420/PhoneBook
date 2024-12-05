@@ -82,7 +82,7 @@ public class MariaDBDatabaseService : IDatabaseService
         using (var connection = new MySqlConnection(_connectionString))
         {
             connection.Open();
-            string query = "SELECT * FROM Contacts";
+            string query = "SELECT * FROM Contacts ORDER BY FirstName ASC";
             using (var command = new MySqlCommand(query, connection))
             using (var reader = command.ExecuteReader())
             {
