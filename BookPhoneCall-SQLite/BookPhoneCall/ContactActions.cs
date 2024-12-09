@@ -37,14 +37,45 @@ namespace BookPhoneCall
             Console.Clear();
             List<Contact> contacts = contactService.GetAllContacts();
 
-            Console.WriteLine("Lista kontaktów:");
-            foreach (var contact in contacts)
+            if (contacts.Count == 0)
             {
-                Console.WriteLine($"{contact.FirstName} {contact.LastName} - {contact.PhoneNumber}, {contact.Email}");
+                Console.WriteLine("Brak kontaktów do wyświetlenia.");
+                Console.WriteLine("Naciśnij dowolny klawisz, aby wrócić do menu.");
+                Console.ReadKey();
+                return;
             }
 
-            Console.WriteLine("Naciśnij dowolny klawisz, aby wrócić do menu.");
-            Console.ReadKey();
+            int pageSize = 5;
+            int currentPage = 0; 
+            int totalPages = (int)Math.Ceiling(contacts.Count / (double)pageSize);
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine($"Lista kontaktów - Strona {currentPage + 1} z {totalPages}:");
+
+                var contactsToDisplay = contacts.Skip(currentPage * pageSize).Take(pageSize).ToList();
+                foreach (var contact in contactsToDisplay)
+                {
+                    Console.WriteLine($"{contact.FirstName} {contact.LastName} - {contact.PhoneNumber}, {contact.Email}");
+                }
+
+                Console.WriteLine("\nStrzałki w lewo/prawo do nawigacji, ESC aby wrócić do menu.");
+
+                var key = Console.ReadKey(true).Key;
+                if (key == ConsoleKey.RightArrow && currentPage < totalPages - 1)
+                {
+                    currentPage++;
+                }
+                else if (key == ConsoleKey.LeftArrow && currentPage > 0)
+                {
+                    currentPage--;
+                }
+                else if (key == ConsoleKey.Escape)
+                {
+                    break;
+                }
+            }
         }
 
         public static void DeleteContact(IDatabaseService contactService)
